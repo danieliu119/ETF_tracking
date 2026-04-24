@@ -8,14 +8,3 @@ services:
     envVars:
       - key: DB_PATH
         value: etf_history.db
-  - type: worker
-    name: etf-sync-worker
-    env: python
-    plan: free
-    buildCommand: pip install -r render_minimal/requirements.txt
-    startCommand: python render_minimal/run_active_etf_job.py
-    envVars:
-      - key: JOB_MODE
-        value: loop
-      - key: JOB_INTERVAL_MINUTES
-        value: "360"
