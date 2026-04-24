@@ -2,18 +2,18 @@ name: Active ETF Sync
 
 on:
   schedule:
-    - cron: '0 */12 * * *' # 每 12 小時自動執行一次
-  workflow_dispatch:      # 允許手動點擊執行
+    - cron: '0 */12 * * *'
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4 # 升級版本解決警告
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5 # 升級版本解決警告
         with:
           python-version: '3.9'
 
@@ -23,7 +23,8 @@ jobs:
 
       - name: Run sync script
         env:
-          # 如果你的資料庫在 Render 上，請在這裡設定連接字串
-          DATABASE_URL: ${{ secrets.DATABASE_URL }} 
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
+          # 關鍵修正：確保 Python 能找到 render_minimal 資料夾內的模組
+          export PYTHONPATH=$PYTHONPATH:$(pwd)/render_minimal
           python render_minimal/run_active_etf_job.py
