@@ -1,0 +1,29 @@
+name: Active ETF Sync
+
+on:
+  schedule:
+    - cron: '0 */12 * * *' # 每 12 小時自動執行一次
+  workflow_dispatch:      # 允許手動點擊執行
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          pip install -r render_minimal/requirements.txt
+
+      - name: Run sync script
+        env:
+          # 如果你的資料庫在 Render 上，請在這裡設定連接字串
+          DATABASE_URL: ${{ secrets.DATABASE_URL }} 
+        run: |
+          python render_minimal/run_active_etf_job.py
