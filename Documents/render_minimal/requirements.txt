@@ -1,0 +1,8 @@
+Flask
+pandas
+gunicorn
+lxml
+html5lib
+beautifulsoup4
+selenium
+webdriver-manager
